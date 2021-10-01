@@ -23,23 +23,7 @@ import br.com.projeto_springboot.projeto_spring.repository.UsuarioRepository;
 public class GreetingsController {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
-    @RequestMapping(value = "/{name}", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public String greetingText(@PathVariable String name) {
-        return "Hello " + name + "!";
-    }
-    
-    @RequestMapping(value = "/mostrarnome/{nome}/{idade}", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public String mostrarNome(@PathVariable String nome, @PathVariable int idade) {
-    	Usuario user = new Usuario();
-    	user.setNome(nome);
-    	user.setIdade(idade);
-    	usuarioRepository.save(user);
-    	
-    	return "Seu nome é: " + nome + " e você tem " + idade + " anos";
-    }
+
     @GetMapping(value = "listatodos")
     @ResponseBody
     public ResponseEntity<List<Usuario>> listaUsuario(){
