@@ -3,39 +3,73 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>Insert title here</title>
+<title>Área do Usuário</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
 	rel="stylesheet"
 	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
 	crossorigin="anonymous">
+
+	<style>
+		html {
+			margin: 20px;
+		}
+		
+		form {
+			align: center;
+			width: 400px;
+			
+		}
+		
+		button {
+			margin: 2px;
+			margin-top: 15px;
+		}
+		
+		.formulario {
+			width: 100%;
+			
+		}
+		
+		label {
+			align-text: left;
+		}
+	</style>
 </head>
 <body>
-	<form action="">
-		<div class="form">
-			<label for="idLabel" class="form-label">ID</label> <input type="text"
-				class="form-control" id="idLabel" readonly="readonly">
-		</div>
-		<div class="form">
-			<label for="nomeInput" class="form-label">Nome do usuário</label> <input
-				type="text" class="form-control" id="nomeInput"
-				placeholder="Informe o nome">
-		</div>
-		<div class="form">
-			<label for="idadeInput" class="form-label">Idade</label> <input
-				type="number" class="form-control" id="idadeInput"
-				placeholder="Informe a idade">
-		</div>
 
-	</form>
+	<div class="formulario" align="center">
+		<form align="left">
+			<div class="form">
+				<label for="idLabel" class="form-label">ID</label> <input
+					type="text" class="form-control" id="idLabel" readonly="readonly">
+			</div>
+			<div class="form">
+				<label for="nomeInput" class="form-label">Nome do usuário</label> <input
+					type="text" class="form-control" id="nomeInput"
+					placeholder="Informe o nome">
+			</div>
+			<div class="form">
+				<label for="idadeInput" class="form-label">Idade</label> <input
+					type="number" class="form-control" id="idadeInput"
+					placeholder="Informe a idade">
+			</div>
 
-	<button type="button" class="btn btn-primary" onclick="salvarUsuario()">Salvar</button>
-	<button type="button" class="btn btn-secondary"
-		onclick="resetar();">Novo</button>
-		
-	<button type="button" class="btn btn-danger" data-bs-toggle="modal"
-	data-bs-target="#exampleModal">Pesquisar</button>
-	
+			<div class="botoes" align="center">
+				<button type="button" class="btn btn-primary"
+					onclick="salvarUsuario()">Salvar</button>
+
+				<button type="button" class="btn btn-danger"
+					onclick="removerDaTela();">Remover</button>
+				<button type="button" class="btn btn-dark" data-bs-toggle="modal"
+					data-bs-target="#exampleModal">Pesquisar</button>
+
+				<button type="button" class="btn btn-secondary" onclick="resetar();">Novo</button>
+			</div>
+		</form>
+
+	</div>
+
 
 
 	<div class="modal fade" id="exampleModal" tabindex="-1"
@@ -43,107 +77,142 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Pesquisar usuário</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Pesquisar
+						usuário</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
 					<form>
 						<div class="mb-3">
-							<label for="nomeBusca" class="col-form-label">Informe o nome:</label>
-							<input type="text" class="form-control" id="nomeBusca">
+							<label for="nomeBusca" class="col-form-label">Informe o
+								nome:</label> <input type="text" class="form-control" id="nomeBusca">
 						</div>
 					</form>
 					<table class="table" id="tabelaPesquisa">
-					  <thead>
-					    <tr>
-					      <th scope="col">ID</th>
-					      <th scope="col">Nome</th>
-					      <th scope="col">Idade</th>
-					      <th scope="col">Editar</th>
-					      <th scope="col">Remover</th>
-					    </tr>
-					  </thead>
-					  <tbody>
-					  </tbody>
+						<thead>
+							<tr>
+								<th scope="col">ID</th>
+								<th scope="col">Nome</th>
+								<th scope="col">Idade</th>
+								<th scope="col">Editar</th>
+								<th scope="col">Remover</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
 					</table>
 
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">Cancelar</button>
-					<button type="button" class="btn btn-primary" onclick="pesquisarUser();">Pesquisar</button>
+					<button type="button" class="btn btn-primary"
+						onclick="pesquisarUser();">Pesquisar</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<script>
-		function pesquisarUser(){
+		function pesquisarUser() {
 			var nome = $("#nomeBusca").val();
-			if(nome != null && nome.trim() != ''){
-				
-				$.ajax({
-					method : "GET",
-					url : "buscarpornome",
-					data : "nome=" + nome,
-					success : function(response) {
-						$('#tabelaPesquisa > tbody > tr').remove();
-						for(var i=0; i<response.length; i++){
-							$('#tabelaPesquisa > tbody').append('<tr id="'+response[i].id+'"><td>'+response[i].id+'</td><td>'+response[i].nome+
-									'</td><td>'+response[i].idade+'</td>'+
-									'<td><button type="button" class="btn btn-primary" onclick="colocarEmEdicao('+response[i].id+');">Ver</button>'+
-									'</td><td><button type="button" class="btn btn-danger" onclick="remover('+response[i].id+');">Remover</button></td></tr>');
-						}
-					}
+			if (nome != null && nome.trim() != '') {
 
-				}).fail(function(xhr, status, errorThrown) {
-					alert("Erro ao pesquisar usuário! " + xhr.response());
+				$.ajax({
+						method : "GET",
+						url : "buscarpornome",
+						data : "nome=" + nome,
+						success : function(response) {
+						$('#tabelaPesquisa > tbody > tr')
+								.remove();
+						for (var i = 0; i < response.length; i++) {
+							$('#tabelaPesquisa > tbody')
+								.append(
+								'<tr id="'+response[i].id+'"><td>'
+								+ response[i].id
+								+ '</td><td>'
+								+ response[i].nome
+								+ '</td><td>'
+								+ response[i].idade
+								+ '</td>'
+								+ '<td><button type="button" class="btn btn-primary" onclick="colocarEmEdicao('
+								+ response[i].id
+								+ ');">Ver</button>'
+								+ '</td><td><button type="button" class="btn btn-danger" onclick="remover('
+								+ response[i].id
+								+ ');">Remover</button></td></tr>');
+							}
+						}
+
+				}).fail(
+				function(xhr, status, errorThrown) {
+					alert("Erro ao pesquisar usuário! "
+							+ xhr.response());
 				})
 			}
 		}
 	</script>
-	
+
 	<script>
-		function remover(id){
-			$.ajax({
-				method : "DELETE",
-				url : "remover",
-				data : "iduser=" + id,
-				success : function(response){
-					$('#' + id).remove();
-					alert(response);
-				}
-				
-			}).fail(function(xhr, status, errorThrown){
-				alert("Erro ao remover usuário por ID " + xhr.responseText);
-			})
+		function removerDaTela() {
+			var id = $('#idLabel').val();
+			if(id != null && id.trim() != ''){
+				remover(id);
+			}
+			else{
+				alert("Escolha um usuário para remover!");	
+			}
+			resetar();
 		}
 	</script>
-	
+
+
 	<script>
-		function colocarEmEdicao(id){
+		function remover(id) {
+			if (confirm("Tem certeza de que deseja remover?")) {
+				$.ajax({
+					method : "DELETE",
+					url : "remover",
+					data : "iduser=" + id,
+					success : function(response) {
+						$('#' + id).remove();
+						alert(response);
+					}
+
+			}).fail(
+					function(xhr, status, errorThrown) {
+						alert("Erro ao remover usuário por ID "
+								+ xhr.responseText);
+					})
+			}
+
+		}
+	</script>
+
+	<script>
+		function colocarEmEdicao(id) {
 			$.ajax({
 				method : "GET",
 				url : "buscarporid",
 				data : "iduser=" + id,
-				success : function(response){
+				success : function(response) {
 					$("#idLabel").val(response.id);
 					$("#nomeInput").val(response.nome);
 					$("#idadeInput").val(response.idade);
-					
+
 					$("#exampleModal").modal("hide");
 				}
-				
-			}).fail(function(xhr, status, errorThrown){
+
+			}).fail(function(xhr, status, errorThrown) {
 				alert("Erro ao buscar usuário por ID " + xhr.responseText);
 			})
 		}
 	</script>
-	
-	
+
+
 	<script>
-		function resetar(){
+		function resetar() {
 			window.location.reload()
 		}
 	</script>
